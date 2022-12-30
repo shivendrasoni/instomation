@@ -1,5 +1,3 @@
-# First, install the Instagram Private API library
-# !pip install instagram-private-api
 
 # Import the necessary classes from the library
 from instagram_private_api import Client, ClientError
@@ -29,7 +27,6 @@ def post_reel():
         print(f"Error creating reel: {error}")
 
 def create_reel_video(text, images):
-# !pip install moviepy
 
 # Set the text and images that you want to include in the video
     images = ["image1.jpg", "image2.jpg", "image3.jpg"]
