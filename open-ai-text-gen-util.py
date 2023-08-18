@@ -17,5 +17,6 @@ def generate_hashtags_from_topic(topic):
 
     # Split the generated text into individual hashtags
     hashtags = response.text.split("\n")
-    return hashtags
+    hashtags_string = " ".join(hashtags)
+    return hashtags_string
 
