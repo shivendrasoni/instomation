@@ -2,11 +2,15 @@
 # Import the necessary classes from the library
 from instagram_private_api import Client, ClientError
 from moviepy.editor import ImageSequenceClip, TextClip, CompositeVideoClip
+from open_ai_text_gen_util import generate_hashtags_from_topic
+from dalle_util import generate_image
 
-def post_reel():
-# Set your Instagram username and password
+def post_reel(topic):
+    # Set your Instagram username and password
     username = "YOUR_USERNAME"
     password = "YOUR_PASSWORD"
+    caption = topic
+    hashtags = generate_hashtags_from_topic(topic)
 
     # Set the caption and thumbnail for the reel
     caption = "My new reel!"
@@ -27,9 +31,10 @@ def post_reel():
         print(f"Error creating reel: {error}")
 
 def create_reel_video(text, images):
-
-# Set the text and images that you want to include in the video
-    images = ["image1.jpg", "image2.jpg", "image3.jpg"]
+def create_reel_video(script):
+    # Set the text and images that you want to include in the video
+    text = script
+    images = generate_image(script)
 
     # Create a TextClip object for the text
     text_clip = TextClip(text, fontsize=70, color='white').set_position('center').set_duration(2)
