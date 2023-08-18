@@ -1,10 +1,37 @@
-
-# Import the necessary classes from the library
 from instagram_private_api import Client, ClientError
 from moviepy.editor import ImageSequenceClip, TextClip, CompositeVideoClip
 
-def post_reel():
-# Set your Instagram username and password
+class InstagramReel:
+    def __init__(self, username, password):
+        self.api = Client(username, password)
+        self.user_id = self.api.authenticated_user_id
+
+    def post_reel(self, caption, thumbnail, videos):
+        try:
+            self.api.reel_create(self.user_id, caption, thumbnail, videos)
+            print("Reel created successfully!")
+        except ClientError as error:
+            print(f"Error creating reel: {error}")
+
+class VideoCreator:
+    @staticmethod
+    def create_text_clip(text):
+        return TextClip(text, fontsize=70, color='white').set_position('center').set_duration(2)
+
+    @staticmethod
+    def create_image_sequence_clip(images):
+        return ImageSequenceClip(images, fps=1).set_duration(6)
+
+    @staticmethod
+    def create_reel_video(text, images):
+        text_clip = VideoCreator.create_text_clip(text)
+        image_clip = VideoCreator.create_image_sequence_clip(images)
+
+        video_clip = CompositeVideoClip([text_clip, image_clip])
+        video_clip.write_videofile("video.mp4")
+
+if __name__ == "__main__":
+    # Instagram credentials
     username = "YOUR_USERNAME"
     password = "YOUR_PASSWORD"
 
@@ -15,31 +42,11 @@ def post_reel():
     # Set the list of videos that you want to include in the reel
     videos = ["path/to/video1.mp4", "path/to/video2.mp4"]
 
-    # Authenticate with Instagram and get the user ID
-    api = Client(username, password)
-    user_id = api.authenticated_user_id
+    # Post the reel to Instagram
+    insta = InstagramReel(username, password)
+    insta.post_reel(caption, thumbnail, videos)
 
-    # Create the reel
-    try:
-        api.reel_create(user_id, caption, thumbnail, videos)
-        print("Reel created successfully!")
-    except ClientError as error:
-        print(f"Error creating reel: {error}")
-
-def create_reel_video(text, images):
-
-# Set the text and images that you want to include in the video
+    # Create a new reel video
+    text = "Your text here"
     images = ["image1.jpg", "image2.jpg", "image3.jpg"]
-
-    # Create a TextClip object for the text
-    text_clip = TextClip(text, fontsize=70, color='white').set_position('center').set_duration(2)
-
-    # Create an ImageSequenceClip object for the images
-    image_clip = ImageSequenceClip(images, fps=1).set_duration(6)
-
-    # Combine the text and image clips into a single video clip
-    video_clip = CompositeVideoClip([text_clip, image_clip])
-
-    # Save the video to a file
-    video_clip.write_videofile("video.mp4")
-
+    VideoCreator.create_reel_video(text, images)
