@@ -18,4 +18,5 @@ def generate_image(prompt):
     )
 
     # Print the URL of the generated image
-    print(response.data[0])
+    image_file_paths = [response.data[0]]
+    return image_file_paths
